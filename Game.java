@@ -6,6 +6,8 @@ public class Game {
     Deck myDeck = new Deck(1, true);
     Player player = new Player("Chris");
     Player dealer = new Player("Dealer");
+    int playerScore = 0;
+    int dealerScore = 0;
 
     String playAgain = "y";
     while (playAgain.toLowerCase().equals("y")) {
@@ -36,7 +38,7 @@ public class Game {
           if (ans.compareToIgnoreCase("H") == 0) {
             playerDone = !player.addCard(myDeck.dealCard());
             player.printHand(true);
-            System.out.println();
+            System.out.println("\n");
           } else {
             playerDone = true;
           }
@@ -63,9 +65,15 @@ public class Game {
 
       if (playerSum > dealerSum && playerSum <= 21 || dealerSum > 21) {
         System.out.println("You win!");
+        playerScore++;
+        player.emptyHand();
       } else {
         System.out.println("Dealer wins!");
+        dealerScore++;
+        dealer.emptyHand();
       }
+      System.out.println("Player score: " + playerScore);
+      System.out.println("Dealer score: " + dealerScore);
       System.out.println("Play again? (Y/N) ");
       playAgain = in.nextLine();
     }
