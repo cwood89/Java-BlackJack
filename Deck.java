@@ -3,7 +3,7 @@ import java.util.Random;
 public class Deck {
 
   private Card[] myCards;
-  private int numCards;
+  private int numCards; // play more than one deck
 
   public Deck() {
     this(1, false);

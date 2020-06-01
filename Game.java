@@ -15,6 +15,7 @@ public class Game {
       // play first deal
       player.addCard(myDeck.dealCard());
       dealer.addCard(myDeck.dealCard());
+
       player.addCard(myDeck.dealCard());
       dealer.addCard(myDeck.dealCard());
 
@@ -67,10 +68,12 @@ public class Game {
         System.out.println("You win!");
         playerScore++;
         player.emptyHand();
+        dealer.emptyHand();
       } else {
         System.out.println("Dealer wins!");
         dealerScore++;
         dealer.emptyHand();
+        player.emptyHand();
       }
       System.out.println("Player score: " + playerScore);
       System.out.println("Dealer score: " + dealerScore);
