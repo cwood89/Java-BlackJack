@@ -1,11 +1,9 @@
 public class Card {
-
   private Suit mySuit;
   // ace = 1, jack -king = 11 - 13
   private int myNumber;
 
   public Card(Suit suit, int number) {
-
     this.mySuit = suit;
     if (number >= 1 && number <= 13) {
       this.myNumber = number;
@@ -22,50 +20,62 @@ public class Card {
   @Override
   public String toString() {
     String numStr = "Err";
-
+    String suitSymbol = "Err";
     switch (this.myNumber) {
       case 2:
-        numStr = "Two";
+        numStr = "2";
         break;
       case 3:
-        numStr = "Three";
+        numStr = "3";
         break;
       case 4:
-        numStr = "Four";
+        numStr = "4";
         break;
       case 5:
-        numStr = "Five";
+        numStr = "5";
         break;
       case 6:
-        numStr = "Six";
+        numStr = "6";
         break;
       case 7:
-        numStr = "Seven";
+        numStr = "7";
         break;
       case 8:
-        numStr = "Eight";
+        numStr = "8";
         break;
       case 9:
-        numStr = "Nine";
+        numStr = "9";
         break;
       case 10:
-        numStr = "Ten";
+        numStr = "10";
         break;
       case 11:
-        numStr = "Jack";
+        numStr = "J";
         break;
       case 12:
-        numStr = "Queen";
+        numStr = "Q";
         break;
       case 13:
-        numStr = "King";
+        numStr = "K";
         break;
       case 1:
-        numStr = "Ace";
+        numStr = "A";
         break;
     }
-
-    return numStr + " of " + mySuit.toString();
+    switch (mySuit.toString()) {
+      case "Hearts":
+        suitSymbol = "\u2665";
+        break;
+      case "Spades":
+        suitSymbol = "\u2660";
+        break;
+      case "Clubs":
+        suitSymbol = "\u2663";
+        break;
+      case "Diamonds":
+        suitSymbol = "\u2666";
+        break;
+    }
+    return numStr + suitSymbol;
   }
-
 }

@@ -3,6 +3,8 @@ public class Player {
   private String name;
   private int numOfCards;
   private Card[] hand = new Card[10];
+  private int wallet = 200;
+  private int bet = 0;
 
   public Player(String name) {
     this.name = name;
@@ -53,18 +55,47 @@ public class Player {
       handSum -= 10;
       numAces--;
     }
-
     return handSum;
   }
 
   public void printHand(boolean showFirstCard) {
-    System.out.printf("%s's cards:\n", this.name);
+    System.out.printf("\n %s's cards:", this.name);
     for (int c = 0; c < this.numOfCards; c++) {
       if (c == 0 && !showFirstCard) {
-        System.out.println(" [hidden]");
+        System.out.print(" [hidden]");
       } else {
-        System.out.printf(" %s\n", this.hand[c].toString());
+        System.out.printf("| %s |", this.hand[c].toString());
       }
     }
+  }
+
+  public void addToWallet(int amount) {
+    this.wallet += amount;
+  }
+
+  public void takeFromWallet(int amount) {
+    this.wallet -= amount;
+  }
+
+  public int getWallet() {
+    return this.wallet;
+  }
+
+  public int getBet() {
+    return this.bet;
+  }
+
+  public void bet() {
+    this.wallet -= 5;
+    this.bet += 5;
+  }
+
+  public void bet(int x) {
+    this.wallet -= 5 * x;
+    this.bet += 5 * x;
+  }
+
+  public void clearBet() {
+    this.bet = 0;
   }
 }
