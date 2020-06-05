@@ -1,144 +1,225 @@
-// import java.util.Scanner;
+import java.util.Scanner;
 
-// public class Game {
-// public static void main(String[] args) {
-// Scanner in = new Scanner(System.in);
-// Deck myDeck = new Deck(1, true);
-// Player player = new Player("Chris");
-// Player dealer = new Player("Dealer");
+public class Game {
+  public static void main(String[] args) {
 
-// String playAgain = "y";
+    Scanner in = new Scanner(System.in);
+    Deck myDeck = new Deck(1, true);
+    Player player = new Player("Player");
+    Player dealer = new Player("Dealer");
+    boolean splitPlay = false;
+    String playAgain = "y";
 
-// while (playAgain.toLowerCase().equals("y") && player.getWallet() >= 5) {
+    while (playAgain.toLowerCase().equals("y") && player.getWallet() >= 5) {
+      int betAmount = 0;
 
-// System.out.println("\nYou have $" + player.getWallet() + " in your wallet.");
-// System.out.print("How many bets would you like to make? (each bet is $5): ");
+      System.out.println("\nYou have $" + player.getWallet() + " in your wallet.");
+      System.out.print("How many bets would you like to make? (each bet is $5): ");
 
-// int betAmount = 0;
-// while (betAmount == 0) {
-// try {
-// // checking valid integer using parseInt() method
-// betAmount = Integer.parseInt(in.nextLine());
-// } catch (NumberFormatException e) {
-// System.out.println("Please enter a valid number:");
-// }
-// }
+      while (betAmount == 0) {
+        try {
+          // checking valid integer using parseInt() method
+          betAmount = Integer.parseInt(in.next());
+        } catch (NumberFormatException e) {
+          System.out.println("Please enter a valid number:");
+        }
+        if (betAmount * 5 > player.getWallet()) {
+          System.out.print("You don't have enough money, try a smaller bet: ");
+          betAmount = 0;
+        }
+      }
 
-// player.bet(betAmount);
-// System.out.println("\nYou bet a total of $" + player.getBet() + "\n");
+      player.bet(betAmount);
 
-// // play first deal
-// player.addCard(myDeck.dealCard());
-// dealer.addCard(myDeck.dealCard());
+      System.out.println("\nYou bet a total of $" + player.getBet() + "\n");
 
-// player.addCard(myDeck.dealCard());
-// dealer.addCard(myDeck.dealCard());
+      // play first deal
+      player.addCard(myDeck.dealCard());
+      dealer.addCard(myDeck.dealCard());
 
-// // print hands
-// System.out.println("Cards are dealt");
-// player.printHand(true);
-// dealer.printHand(false);
+      player.addCard(myDeck.dealCard());
+      dealer.addCard(myDeck.dealCard());
 
-// // flags for when each player is finished hitting
+      if (player.checkForSplit()) {
+        player.printHand(true);
+        System.out.print("\nWould you like to split your hand? Y/N: ");
+        String playSplit = in.next();
+        if (playSplit.equalsIgnoreCase("y")) {
+          splitPlay = true;
+          player.split();
+          player.bet2(betAmount);
+          player.addCard(myDeck.dealCard());
+          player.addCardToSecondHand(myDeck.dealCard());
+        } else {
+          splitPlay = false;
+        }
+      }
+      // print hands
+      System.out.println("Cards are dealt");
+      player.printHand(true);
 
-// boolean playerDone = false;
-// boolean dealerDone = false;
-// String ans;
+      if (splitPlay)
+        player.printHand2(true);
 
-// while (!playerDone || !dealerDone) {
+      dealer.printHand(false);
 
-// if (!playerDone) {
+      // flags for when each player is finished hitting
 
-// System.out.print("\n\nHit or Stay (Enter H to hit): ");
-// ans = in.next();
+      boolean playerDone = false;
+      boolean dealerDone = false;
+      boolean player2ndHandDone = false;
+      String ans;
 
-// if (ans.compareToIgnoreCase("H") == 0) {
-// playerDone = !player.addCard(myDeck.dealCard());
+      while (!playerDone && !player2ndHandDone || !dealerDone) {
 
-// System.out.println("\nYou Hit.");
+        if (player.getHandSum() > 21 || player.getHandSum() == 21) {
+          playerDone = true;
+          if (!splitPlay)
+            break;
+        }
 
-// if (player.getHandSum() > 21 || player.getHandSum() == 21) {
-// playerDone = true;
-// break;
-// }
+        if (!playerDone) {
 
-// } else {
+          System.out.print("\n\nHit or Stay (Enter H to hit): ");
+          ans = in.next();
 
-// System.out.println("\nYou Stayed.");
-// playerDone = true;
+          if (ans.compareToIgnoreCase("H") == 0) {
 
-// if (player.getHandSum() > 21 || player.getHandSum() == 21) {
-// playerDone = true;
-// break;
-// }
-// }
-// }
+            playerDone = !player.addCard(myDeck.dealCard());
 
-// if (!dealerDone) {
-// if (dealer.getHandSum() < 17) {
+            System.out.println("\nYou hit.");
 
-// System.out.println("\nThe dealer hits.");
-// dealerDone = !dealer.addCard(myDeck.dealCard());
+            if (player.getHandSum() > 21 || player.getHandSum() == 21) {
+              playerDone = true;
+              if (!splitPlay)
+                break;
+            }
+          } else {
 
-// if (dealer.getHandSum() > 21 || dealer.getHandSum() == 21) {
-// dealerDone = true;
-// break;
-// }
+            System.out.println("\nYou stayed.");
+            playerDone = true;
 
-// } else {
-// System.out.println("The dealer stays.\n");
-// dealerDone = true;
+          }
 
-// if (dealer.getHandSum() > 21 || dealer.getHandSum() == 21) {
-// dealerDone = true;
-// break;
-// }
+        }
 
-// }
+        if (splitPlay) {
 
-// }
+          if (!player2ndHandDone) {
 
-// player.printHand(true);
-// dealer.printHand(false);
-// }
+            if (player.getHandTwoSum() > 21 || player.getHandTwoSum() == 21) {
+              player2ndHandDone = true;
+            }
 
-// System.out.println();
-// // print final hands
-// player.printHand(true);
-// dealer.printHand(true);
+            System.out.print("\nHit or stay on second hand (Enter H to hit): ");
+            ans = in.next();
 
-// // Check for winner ========================================
-// if (player.getHandSum() == 21 || player.getHandSum() > dealer.getHandSum() &&
-// player.getHandSum() <= 21
-// || dealer.getHandSum() > 21) {
+            if (ans.compareToIgnoreCase("H") == 0) {
+              player2ndHandDone = !player.addCardToSecondHand(myDeck.dealCard());
 
-// System.out.println("\nYou win!");
-// player.addToWallet(player.getBet() * 2);
+              System.out.println("\nYou hit on second hand.");
 
-// } else if (dealer.getHandSum() == player.getHandSum()) {
+              if (player.getHandTwoSum() > 21 || player.getHandTwoSum() == 21) {
+                player2ndHandDone = true;
+              }
+            } else {
 
-// player.addToWallet(player.getBet());
-// System.out.println("Push");
+              System.out.println("\nYou stayed on second hand.");
+              player2ndHandDone = true;
+            }
+          } else
+            player2ndHandDone = true;
+        }
 
-// } else if (dealer.getHandSum() == 21 || dealer.getHandSum() >
-// player.getHandSum() && dealer.getHandSum() <= 21
-// || player.getHandSum() > 21) {
+        if (!dealerDone) {
+          if (dealer.getHandSum() < 17) {
 
-// System.out.println("\nDealer wins!");
-// }
+            System.out.println("\nThe dealer hits.");
+            dealerDone = !dealer.addCard(myDeck.dealCard());
 
-// player.clearBet();
-// dealer.emptyHand();
-// player.emptyHand();
+            if (dealer.getHandSum() > 21 || dealer.getHandSum() == 21) {
+              dealerDone = true;
+              break;
+            }
 
-// if (player.getWallet() < 5) {
-// System.out.println("\nYou're out of money, better luck next time.");
-// } else {
-// System.out.println("\nYou have $" + player.getWallet() + " in your wallet.");
-// System.out.println("Play again? (Y/N): ");
-// playAgain = in.next();
-// }
-// }
-// in.close();
-// }
-// }
+          } else {
+            System.out.println("\nThe dealer stays.");
+            dealerDone = true;
+
+            if (dealer.getHandSum() > 21 || dealer.getHandSum() == 21) {
+              dealerDone = true;
+              break;
+            }
+
+          }
+
+        }
+
+        player.printHand(true);
+
+        if (splitPlay)
+          player.printHand2(true);
+
+        dealer.printHand(false);
+      }
+
+      System.out.println();
+      // print final hands
+      player.printHand(true);
+      if (splitPlay)
+        player.printHand2(true);
+      dealer.printHand(true);
+
+      // Check for winner ========================================
+      if (player.getHandSum() == 21 || player.getHandSum() > dealer.getHandSum() && player.getHandSum() <= 21
+          || dealer.getHandSum() > 21 && player.getHandSum() <= 21) {
+
+        System.out.println("\nYou win!");
+        player.addToWallet(player.getBet() * 2);
+
+      } else if (dealer.getHandSum() == player.getHandSum()) {
+
+        player.addToWallet(player.getBet());
+        System.out.println("\nPush");
+
+      } else if (dealer.getHandSum() == 21 || dealer.getHandSum() > player.getHandSum() && dealer.getHandSum() <= 21
+          || player.getHandSum() > 21) {
+
+        System.out.println("\nDealer wins!");
+      }
+      // second hand winner =========================
+      if (splitPlay) {
+        if (player.getHandTwoSum() == 21 || player.getHandTwoSum() > dealer.getHandSum() && player.getHandTwoSum() <= 21
+            || dealer.getHandSum() > 21 && player.getHandTwoSum() <= 21) {
+
+          System.out.println("\nYour second hand wins!");
+          player.addToWallet(player.getBet2() * 2);
+
+        } else if (dealer.getHandSum() == player.getHandTwoSum()) {
+
+          player.addToWallet(player.getBet2());
+          System.out.println("\nPush");
+
+        } else if (dealer.getHandSum() == 21
+            || dealer.getHandTwoSum() > player.getHandTwoSum() && dealer.getHandSum() <= 21
+            || player.getHandTwoSum() > 21) {
+
+          System.out.println("\nDealer wins!");
+        }
+      }
+      betAmount = 0;
+      player.clearBet();
+      dealer.emptyHand();
+      player.emptyHand();
+
+      if (player.getWallet() < 5) {
+        System.out.println("\nYou're out of money, better luck next time.");
+      } else {
+        System.out.println("\nYou have $" + player.getWallet() + " in your wallet.");
+        System.out.println("Play again? (Y/N): ");
+        playAgain = in.next();
+      }
+    }
+    in.close();
+  }
+}

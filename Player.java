@@ -7,6 +7,7 @@ public class Player {
   private Card[] hand2 = new Card[10];
   private int wallet = 200;
   private int bet = 0;
+  private int bet2 = 0;
 
   public Player(String name) {
     this.name = name;
@@ -139,6 +140,10 @@ public class Player {
     return this.bet;
   }
 
+  public int getBet2() {
+    return this.bet2;
+  }
+
   public void bet() {
     this.wallet -= 5;
     this.bet += 5;
@@ -149,12 +154,19 @@ public class Player {
     this.bet += 5 * x;
   }
 
+  public void bet2(int x) {
+    this.wallet -= 5 * x;
+    this.bet2 += 5 * x;
+  }
+
   public void clearBet() {
     this.bet = 0;
+    this.bet2 = 0;
   }
 
   public boolean checkForSplit() {
-    if (this.hand[0] == this.hand[1]) {
+
+    if (this.hand[0].getNumber() == this.hand[1].getNumber()) {
       return true;
     } else {
       return false;
@@ -162,8 +174,10 @@ public class Player {
   }
 
   public void split() {
-    this.hand2[0] = this.hand[1];
-    this.hand[0] = this.hand[1];
-    this.hand[1] = null;
+    Card c1 = this.hand[0];
+    Card c2 = this.hand[1];
+    this.emptyHand();
+    this.addCard(c1);
+    this.addCardToSecondHand(c2);
   }
 }
