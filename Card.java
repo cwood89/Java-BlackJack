@@ -21,6 +21,8 @@ public class Card {
   public String toString() {
     String numStr = "Err";
     String suitSymbol = "Err";
+    String ANSI_RESET = "\u001B[0m";
+    String ANSI_RED = "\u001B[31m";
     switch (this.myNumber) {
       case 2:
         numStr = "2";
@@ -76,6 +78,10 @@ public class Card {
         suitSymbol = "\u2666";
         break;
     }
-    return numStr + suitSymbol;
+    if (mySuit.toString().equals("Hearts") || mySuit.toString().equals("Diamonds")) {
+      return ANSI_RED + numStr + suitSymbol + ANSI_RESET;
+    } else {
+      return numStr + suitSymbol;
+    }
   }
 }

@@ -1,6 +1,10 @@
 import java.util.Scanner;
 
 public class Game {
+
+  public static final String ANSI_GREEN = "\u001B[32m";
+  public static final String ANSI_RESET = "\u001B[0m";
+
   public static void main(String[] args) {
 
     Scanner in = new Scanner(System.in);
@@ -13,8 +17,8 @@ public class Game {
     while (playAgain.toLowerCase().equals("y") && player.getWallet() >= 5) {
       int betAmount = 0;
 
-      System.out.println("\nYou have $" + player.getWallet() + " in your wallet.");
-      System.out.print("How many bets would you like to make? (each bet is $5): ");
+      System.out.println("\nYou have " + ANSI_GREEN + "$" + player.getWallet() + ANSI_RESET + " in your wallet.");
+      System.out.print("How many bets would you like to make? (each bet is " + ANSI_GREEN + "$5" + ANSI_RESET + "): ");
 
       while (betAmount == 0) {
         try {
@@ -23,6 +27,7 @@ public class Game {
         } catch (NumberFormatException e) {
           System.out.println("Please enter a valid number:");
         }
+
         if (betAmount * 5 > player.getWallet()) {
           System.out.print("You don't have enough money, try a smaller bet: ");
           betAmount = 0;
@@ -31,7 +36,7 @@ public class Game {
 
       player.bet(betAmount);
 
-      System.out.println("\nYou bet a total of $" + player.getBet() + "\n");
+      System.out.println("\nYou bet a total of " + ANSI_GREEN + "$" + player.getBet() + ANSI_RESET + "\n");
 
       // play first deal
       player.addCard(myDeck.dealCard());
@@ -43,9 +48,11 @@ public class Game {
       if (player.checkForSplit()) {
         player.printHand(true);
         System.out.print("\nWould you like to split your hand? Y/N: ");
+
         String playSplit = in.next();
         if (playSplit.equalsIgnoreCase("y")) {
           splitPlay = true;
+
           player.split();
           player.bet2(betAmount);
           player.addCard(myDeck.dealCard());
@@ -215,7 +222,7 @@ public class Game {
       if (player.getWallet() < 5) {
         System.out.println("\nYou're out of money, better luck next time.");
       } else {
-        System.out.println("\nYou have $" + player.getWallet() + " in your wallet.");
+        System.out.println("\nYou have " + ANSI_GREEN + "$" + player.getWallet() + ANSI_RESET + " in your wallet.");
         System.out.println("Play again? (Y/N): ");
         playAgain = in.next();
       }
