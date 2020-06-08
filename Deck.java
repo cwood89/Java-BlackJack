@@ -74,4 +74,8 @@ public class Deck {
     System.out.printf("\t\t[%d others]\n", this.numCards - numToPrint);
   }
 
+  public int getNumOfCards() {
+    return this.numCards;
+  }
+
 }

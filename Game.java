@@ -8,15 +8,21 @@ public class Game {
   public static void main(String[] args) {
 
     Scanner in = new Scanner(System.in);
-    Deck myDeck = new Deck(1, true);
     Player player = new Player("Player");
     Player dealer = new Player("Dealer");
     boolean splitPlay = false;
     String playAgain = "y";
+    System.out.println("\n\nWelcome to Gardner's Casino! Good Luck!");
+    System.out.print("How old are you: ");
+    int age = in.nextInt();
+    if (age < 18) {
+      System.out.println("Sorry you're not old enough to play.");
+      System.exit(0);
+    }
 
     while (playAgain.toLowerCase().equals("y") && player.getWallet() >= 5) {
       int betAmount = 0;
-
+      Deck myDeck = new Deck(1, true);
       System.out.println("\nYou have " + ANSI_GREEN + "$" + player.getWallet() + ANSI_RESET + " in your wallet.");
       System.out.print("How many bets would you like to make? (each bet is " + ANSI_GREEN + "$5" + ANSI_RESET + "): ");
 
@@ -107,7 +113,6 @@ public class Game {
             playerDone = true;
 
           }
-
         }
 
         if (splitPlay) {
@@ -157,9 +162,7 @@ public class Game {
               dealerDone = true;
               break;
             }
-
           }
-
         }
 
         player.printHand(true);
@@ -223,8 +226,11 @@ public class Game {
         System.out.println("\nYou're out of money, better luck next time.");
       } else {
         System.out.println("\nYou have " + ANSI_GREEN + "$" + player.getWallet() + ANSI_RESET + " in your wallet.");
-        System.out.println("Play again? (Y/N): ");
+        System.out.print("Play again? (Y/N): ");
         playAgain = in.next();
+        if (playAgain.equalsIgnoreCase("N")) {
+          System.out.println("Thanks for playing!");
+        }
       }
     }
     in.close();
